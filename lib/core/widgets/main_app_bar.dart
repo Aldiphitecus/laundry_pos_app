@@ -11,7 +11,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       title: Text(
         title,
-        style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.w500),
+        style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.w700),
       ),
     );
   }
