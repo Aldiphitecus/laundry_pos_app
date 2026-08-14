@@ -87,7 +87,7 @@ class ChartWidget extends StatelessWidget {
           toY: y,
           color: AppColors.tertiary,
           width: 30,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(6),
         ),
       ],
     );

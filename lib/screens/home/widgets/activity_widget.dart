@@ -3,7 +3,8 @@ import 'package:laundry_pos_app/core/widgets/activity_card.dart';
 import 'package:laundry_pos_app/core/constants/app_colors.dart';
 
 class ActivityWidget extends StatelessWidget {
-  const ActivityWidget({super.key});
+  final void Function(int) onNavigateToTab;
+  const ActivityWidget({super.key, required this.onNavigateToTab});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,7 @@ class ActivityWidget extends StatelessWidget {
             ),
 
             TextButton(
-              onPressed: () {},
+              onPressed: () => onNavigateToTab(1),
               child: const Text(
                 'Lihat semua',
                 style: TextStyle(

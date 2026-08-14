@@ -8,7 +8,8 @@ import 'package:laundry_pos_app/screens/home/widgets/total_transactions_widget.d
 import 'package:laundry_pos_app/screens/home/widgets/chart_widget.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  final void Function(int) onNavigateToTab;
+  const HomeScreen({super.key, required this.onNavigateToTab});
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +50,7 @@ class HomeScreen extends StatelessWidget {
                     ChartWidget(),
                     const SizedBox(height: 18.0),
                     // NEWEST ACTIVITY
-                    ActivityWidget(),
+                    ActivityWidget(onNavigateToTab: onNavigateToTab),
                   ],
                 ),
               ),

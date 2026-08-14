@@ -15,17 +15,23 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
-  final List<Widget> _screens = const [
-    HomeScreen(),
-    TransactionsScreen(),
-    MasterScreen(),
-    SettingScreen(),
-  ];
+  void _onNavigateToTab(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> screens = [
+      HomeScreen(onNavigateToTab: _onNavigateToTab),
+      TransactionsScreen(),
+      MasterScreen(),
+      SettingScreen(),
+    ];
+
     return Scaffold(
-      body: IndexedStack(index: _selectedIndex, children: _screens),
+      body: IndexedStack(index: _selectedIndex, children: screens),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -38,11 +44,7 @@ class _MainScreenState extends State<MainScreen> {
         ),
         child: NavigationBar(
           selectedIndex: _selectedIndex,
-          onDestinationSelected: (index) {
-            setState(() {
-              _selectedIndex = index;
-            });
-          },
+          onDestinationSelected: _onNavigateToTab,
           indicatorColor: AppColors.primary,
           indicatorShape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
