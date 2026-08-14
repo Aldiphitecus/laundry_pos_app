@@ -25,7 +25,6 @@ class ActivityCard extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
                 color: AppColors.secondary.withValues(alpha: 0.2),
-                border: Border.all(color: AppColors.secondary, width: 1),
                 borderRadius: BorderRadius.circular(100),
               ),
               child: const Padding(
@@ -51,7 +50,10 @@ class ActivityCard extends StatelessWidget {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  const Text('2 menit yang lalu'),
+                  Text(
+                    '2 menit yang lalu',
+                    style: TextStyle(color: Colors.grey[700]),
+                  ),
                 ],
               ),
             ),
