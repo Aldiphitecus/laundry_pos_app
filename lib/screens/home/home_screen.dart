@@ -7,9 +7,16 @@ import 'package:laundry_pos_app/screens/home/widgets/information_widget.dart';
 import 'package:laundry_pos_app/screens/home/widgets/total_transactions_widget.dart';
 import 'package:laundry_pos_app/screens/home/widgets/chart_widget.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   final void Function(int) onNavigateToTab;
   const HomeScreen({super.key, required this.onNavigateToTab});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  String _dataFilterBy = 'today';
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +34,11 @@ class HomeScreen extends StatelessWidget {
                   children: FilterItems.filterItems.map((filter) {
                     return FilterChipButton(
                       filter: filter,
-                      selected: filter.filterValue == 'today',
+                      selected: filter.filterValue == _dataFilterBy,
                       onSelected: (selected) {
-                        print(filter.filterValue);
+                        setState(() {
+                          _dataFilterBy = filter.filterValue;
+                        });
                       },
                     );
                   }).toList(),
@@ -50,7 +59,7 @@ class HomeScreen extends StatelessWidget {
                     ChartWidget(),
                     const SizedBox(height: 18.0),
                     // NEWEST ACTIVITY
-                    ActivityWidget(onNavigateToTab: onNavigateToTab),
+                    ActivityWidget(onNavigateToTab: widget.onNavigateToTab),
                   ],
                 ),
               ),

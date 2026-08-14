@@ -25,7 +25,7 @@ class TotalTransactionsWidget extends StatelessWidget {
               '142',
               style: TextStyle(
                 color: AppColors.secondary,
-                fontSize: 40.0,
+                fontSize: 30.0,
                 fontWeight: FontWeight.bold,
               ),
             ),

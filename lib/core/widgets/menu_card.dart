@@ -2,7 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:laundry_pos_app/core/constants/app_colors.dart';
 
 class MenuCard extends StatelessWidget {
-  const MenuCard({super.key});
+  final String menuTitle;
+  final String menuDescription;
+  final IconData menuIcon;
+  final Color iconColor;
+  final VoidCallback onMenuTap;
+
+  const MenuCard({
+    super.key,
+    required this.menuTitle,
+    required this.menuDescription,
+    required this.menuIcon,
+    required this.iconColor,
+    required this.onMenuTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -12,9 +25,7 @@ class MenuCard extends StatelessWidget {
         side: BorderSide(color: Colors.grey.withValues(alpha: 0.1)),
       ),
       child: InkWell(
-        onTap: () {
-          print('You clicked!');
-        },
+        onTap: onMenuTap,
         child: Padding(
           padding: EdgeInsets.all(20.0),
           child: Column(
@@ -22,25 +33,21 @@ class MenuCard extends StatelessWidget {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.2),
+                  color: iconColor.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(100),
                 ),
                 child: Padding(
                   padding: EdgeInsets.all(12.0),
-                  child: Icon(
-                    Icons.miscellaneous_services,
-                    size: 35.0,
-                    color: AppColors.primary,
-                  ),
+                  child: Icon(menuIcon, size: 35.0, color: iconColor),
                 ),
               ),
               const SizedBox(height: 15.0),
               Text(
-                'Daftar Layanan',
+                menuTitle,
                 style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.w600),
               ),
               Text(
-                'Tambah, ubah, atau hapus layanan yang Anda tawarkan.',
+                menuDescription,
                 style: TextStyle(fontSize: 18, color: Colors.grey[700]),
               ),
             ],
