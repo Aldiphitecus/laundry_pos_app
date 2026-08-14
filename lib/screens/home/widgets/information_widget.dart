@@ -26,7 +26,7 @@ class InformationWidget extends StatelessWidget {
                   Text(
                     'Rp 2.500.000',
                     style: TextStyle(
-                      fontSize: 40.0,
+                      fontSize: 30.0,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
