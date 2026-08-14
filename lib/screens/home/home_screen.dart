@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:laundry_pos_app/core/constants/app_colors.dart';
 import 'package:laundry_pos_app/core/constants/filter_item.dart';
-import 'package:laundry_pos_app/core/widgets/activity_card.dart';
 import 'package:laundry_pos_app/core/widgets/filter_chip_button.dart';
 import 'package:laundry_pos_app/core/widgets/main_app_bar.dart';
 import 'package:laundry_pos_app/screens/home/widgets/activity_widget.dart';

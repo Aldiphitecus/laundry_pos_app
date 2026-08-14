@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:laundry_pos_app/screens/home/home_screen.dart';
+import 'package:laundry_pos_app/screens/main/main_screen.dart';
 
 class LaundryApp extends StatelessWidget {
   const LaundryApp({super.key});
@@ -9,7 +9,7 @@ class LaundryApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
-      routes: {'/': (context) => const HomeScreen()},
+      routes: {'/': (context) => const MainScreen()},
     );
   }
 }
