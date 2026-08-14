@@ -21,7 +21,11 @@ class ActivityWidget extends StatelessWidget {
               onPressed: () {},
               child: const Text(
                 'Lihat semua',
-                style: TextStyle(color: AppColors.primary, fontSize: 20.0),
+                style: TextStyle(
+                  color: AppColors.primary,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
           ],
@@ -29,9 +33,9 @@ class ActivityWidget extends StatelessWidget {
         const SizedBox(height: 12.0),
         Column(
           children: [
-            ActivityCard(notaCode: "LN-140626", totalPrice: '125.000'),
-            ActivityCard(notaCode: "LN-140626", totalPrice: '125.000'),
-            ActivityCard(notaCode: "LN-140626", totalPrice: '125.000'),
+            ActivityCard(notaCode: "LN-140626", totalPrice: 125000),
+            ActivityCard(notaCode: "LN-140626", totalPrice: 125000),
+            ActivityCard(notaCode: "LN-140626", totalPrice: 125000),
           ],
         ),
       ],

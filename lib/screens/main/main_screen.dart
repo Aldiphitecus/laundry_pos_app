@@ -43,7 +43,10 @@ class _MainScreenState extends State<MainScreen> {
               _selectedIndex = index;
             });
           },
-          indicatorColor: Colors.transparent,
+          indicatorColor: AppColors.primary,
+          indicatorShape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
           labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
           labelTextStyle: WidgetStateProperty.resolveWith((states) {
             if (states.contains(WidgetState.selected)) {
@@ -62,31 +65,22 @@ class _MainScreenState extends State<MainScreen> {
           destinations: const [
             NavigationDestination(
               icon: Icon(Icons.home_rounded),
-              selectedIcon: Icon(Icons.home_rounded, color: AppColors.primary),
+              selectedIcon: Icon(Icons.home_rounded, color: Colors.white),
               label: 'Beranda',
             ),
             NavigationDestination(
               icon: Icon(Icons.history_rounded),
-              selectedIcon: Icon(
-                Icons.history_rounded,
-                color: AppColors.primary,
-              ),
+              selectedIcon: Icon(Icons.history_rounded, color: Colors.white),
               label: 'Riwayat',
             ),
             NavigationDestination(
               icon: Icon(Icons.dataset_rounded),
-              selectedIcon: Icon(
-                Icons.dataset_rounded,
-                color: AppColors.primary,
-              ),
+              selectedIcon: Icon(Icons.dataset_rounded, color: Colors.white),
               label: 'Master',
             ),
             NavigationDestination(
               icon: Icon(Icons.settings_rounded),
-              selectedIcon: Icon(
-                Icons.settings_rounded,
-                color: AppColors.primary,
-              ),
+              selectedIcon: Icon(Icons.settings_rounded, color: Colors.white),
               label: 'Pengaturan',
             ),
           ],
