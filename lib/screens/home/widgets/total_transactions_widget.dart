@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:laundry_pos_app/core/constants/app_colors.dart';
 
 class TotalTransactionsWidget extends StatelessWidget {
   const TotalTransactionsWidget({super.key});
@@ -22,7 +23,11 @@ class TotalTransactionsWidget extends StatelessWidget {
             const SizedBox(height: 7.0),
             const Text(
               '142',
-              style: TextStyle(fontSize: 40.0, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                color: AppColors.secondary,
+                fontSize: 40.0,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),
