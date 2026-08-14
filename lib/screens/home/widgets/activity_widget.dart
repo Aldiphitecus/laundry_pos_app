@@ -31,7 +31,6 @@ class ActivityWidget extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 12.0),
         Column(
           children: [
             ActivityCard(notaCode: "LN-140626", totalPrice: 125000),

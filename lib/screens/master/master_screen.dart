@@ -7,8 +7,8 @@ class MasterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const MainAppBar(title: 'Master Data'),
-      body: Center(child: Text('Master data')),
+      appBar: const MainAppBar(title: 'Data Utama'),
+      body: Center(child: Text('Data Utama')),
     );
   }
 }

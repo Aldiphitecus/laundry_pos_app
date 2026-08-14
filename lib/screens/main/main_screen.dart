@@ -78,7 +78,7 @@ class _MainScreenState extends State<MainScreen> {
             NavigationDestination(
               icon: Icon(Icons.dataset_rounded),
               selectedIcon: Icon(Icons.dataset_rounded, color: Colors.white),
-              label: 'Master',
+              label: 'Data Utama',
             ),
             NavigationDestination(
               icon: Icon(Icons.settings_rounded),
