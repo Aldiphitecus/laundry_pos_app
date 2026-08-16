@@ -13,7 +13,7 @@ class MasterScreen extends StatelessWidget {
     return Scaffold(
       appBar: const MainAppBar(title: 'Data Utama'),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(10, 16, 10, 24),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

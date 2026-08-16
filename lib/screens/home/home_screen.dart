@@ -23,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: const MainAppBar(title: 'Laundry POS'),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(10, 16, 10, 24),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         child: SingleChildScrollView(
           child: Column(
             children: [
