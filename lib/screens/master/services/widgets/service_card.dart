@@ -42,7 +42,7 @@ class ServiceCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(
-                    'Rp $servicePrice',
+                    servicePrice,
                     style: TextStyle(
                       color: Colors.green,
                       fontSize: 15,

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:laundry_pos_app/core/constants/app_colors.dart';
+import 'package:laundry_pos_app/core/services/database_service.dart';
+import 'package:laundry_pos_app/core/utils/currency_input_formatter.dart';
+import 'package:laundry_pos_app/models/service_model.dart';
 
 class AddServiceForm extends StatefulWidget {
   const AddServiceForm({super.key});
@@ -14,6 +17,7 @@ class _AddServiceFormState extends State<AddServiceForm> {
   final _priceController = TextEditingController();
 
   String _priceUnit = 'kg';
+  bool _isSaving = false;
 
   @override
   void dispose() {
@@ -22,16 +26,34 @@ class _AddServiceFormState extends State<AddServiceForm> {
     super.dispose();
   }
 
-  void _handleSave() {
-    if (_formKey.currentState!.validate()) {
-      final name = _nameController.text;
-      final price = _priceController.text;
-      final unit = _priceUnit;
-
-      print('Nama: $name, Harga: $price / $unit');
-
-      Navigator.pop(context);
-    }
+  void _handleSave() async {
+    if (!_formKey.currentState!.validate()) return;
+    setState(() => _isSaving = true);
+    final cleanedPrice = _priceController.text.replaceAll(
+      RegExp(r'[^0-9]'),
+      '',
+    );
+    final newService = ServiceModel(
+      name: _nameController.text.trim(),
+      price: int.parse(cleanedPrice),
+      unit: _priceUnit,
+    );
+    final result = await DatabaseService.instance.insertService(newService);
+    if (!mounted) return;
+    result.fold(
+      (error) {
+        setState(() => _isSaving = false);
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(error)));
+      },
+      (id) {
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Layanan berhasil ditambahkan')),
+        );
+      },
+    );
   }
 
   @override
@@ -56,6 +78,7 @@ class _AddServiceFormState extends State<AddServiceForm> {
             const SizedBox(height: 16),
             TextFormField(
               controller: _nameController,
+              enabled: !_isSaving,
               decoration: InputDecoration(
                 labelText: 'Nama Layanan',
                 border: OutlineInputBorder(
@@ -63,7 +86,7 @@ class _AddServiceFormState extends State<AddServiceForm> {
                 ),
               ),
               validator: (value) {
-                if (value == null || value.isEmpty) {
+                if (value == null || value.trim().isEmpty) {
                   return 'Nama layanan wajib diisi';
                 }
                 return null;
@@ -72,6 +95,7 @@ class _AddServiceFormState extends State<AddServiceForm> {
             const SizedBox(height: 12),
             TextFormField(
               controller: _priceController,
+              enabled: !_isSaving,
               decoration: InputDecoration(
                 labelText: 'Harga',
                 prefixText: 'Rp ',
@@ -80,9 +104,14 @@ class _AddServiceFormState extends State<AddServiceForm> {
                 ),
               ),
               keyboardType: TextInputType.number,
+              inputFormatters: [CurrencyInputFormatter()],
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Harga wajib diisi';
+                }
+                final cleaned = value.replaceAll(RegExp(r'[^0-9]'), '');
+                if (cleaned.isEmpty || int.tryParse(cleaned) == null) {
+                  return 'Harga harus berupa angka';
                 }
                 return null;
               },
@@ -99,11 +128,13 @@ class _AddServiceFormState extends State<AddServiceForm> {
                 ButtonSegment(value: 'kg', label: Text('Per Kg')),
               ],
               selected: {_priceUnit},
-              onSelectionChanged: (newSelection) {
-                setState(() {
-                  _priceUnit = newSelection.first;
-                });
-              },
+              onSelectionChanged: _isSaving
+                  ? null
+                  : (newSelection) {
+                      setState(() {
+                        _priceUnit = newSelection.first;
+                      });
+                    },
               style: SegmentedButton.styleFrom(
                 selectedBackgroundColor: AppColors.primary.withValues(
                   alpha: 0.15,
@@ -115,21 +146,33 @@ class _AddServiceFormState extends State<AddServiceForm> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: _handleSave,
+                onPressed: _isSaving ? null : _handleSave,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
+                  disabledBackgroundColor: AppColors.primary.withValues(
+                    alpha: 0.5,
+                  ),
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Text(
-                  'Simpan',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+                child: _isSaving
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : const Text(
+                        'Simpan',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
               ),
             ),
           ],
