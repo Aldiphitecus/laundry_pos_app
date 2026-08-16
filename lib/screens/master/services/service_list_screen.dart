@@ -17,17 +17,40 @@ class ServiceListScreen extends StatefulWidget {
 
 class _ServiceListScreenState extends State<ServiceListScreen> {
   late Future<Either<String, List<ServiceModel>>> _servicesFuture;
+  final _searchController = TextEditingController();
+  String _searchQuery = '';
 
   @override
   void initState() {
     super.initState();
     _servicesFuture = DatabaseService.instance.getAllServices();
+    _searchController.addListener(_onSearchChanged);
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_onSearchChanged);
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _onSearchChanged() {
+    setState(() {
+      _searchQuery = _searchController.text.trim().toLowerCase();
+    });
   }
 
   void _refreshServices() {
     setState(() {
       _servicesFuture = DatabaseService.instance.getAllServices();
     });
+  }
+
+  List<ServiceModel> _filterServices(List<ServiceModel> services) {
+    if (_searchQuery.isEmpty) return services;
+    return services
+        .where((service) => service.name.toLowerCase().contains(_searchQuery))
+        .toList();
   }
 
   void _showAddServiceModal(BuildContext context) async {
@@ -46,20 +69,22 @@ class _ServiceListScreenState extends State<ServiceListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const MainAppBar(title: 'Daftar Layanan'),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.only(
-          left: 10.0,
-          top: 10.0,
-          right: 10.0,
-          bottom: 75.0,
-        ),
-        child: Column(
-          children: [
-            TextField(
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 10.0, top: 10.0, right: 10.0),
+            child: TextField(
+              controller: _searchController,
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.search, size: 30),
                 hintText: 'Cari layanan...',
                 hintStyle: TextStyle(color: Colors.grey[600]),
+                suffixIcon: _searchQuery.isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () => _searchController.clear(),
+                      )
+                    : null,
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: const BorderSide(color: Colors.grey),
@@ -73,23 +98,22 @@ class _ServiceListScreenState extends State<ServiceListScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 15.0),
-            FutureBuilder<Either<String, List<ServiceModel>>>(
+          ),
+          const SizedBox(height: 15.0),
+          Expanded(
+            child: FutureBuilder<Either<String, List<ServiceModel>>>(
               future: _servicesFuture,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Padding(
-                    padding: EdgeInsets.only(top: 40),
-                    child: Center(child: CircularProgressIndicator()),
-                  );
+                  return const Center(child: CircularProgressIndicator());
                 }
                 final result = snapshot.data;
                 if (result == null) return const SizedBox();
 
                 return result.fold(
-                  (error) => Padding(
-                    padding: const EdgeInsets.only(top: 40),
-                    child: Center(
+                  (error) => Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
                       child: Text(
                         'Gagal memuat data: $error',
                         textAlign: TextAlign.center,
@@ -98,9 +122,9 @@ class _ServiceListScreenState extends State<ServiceListScreen> {
                   ),
                   (services) {
                     if (services.isEmpty) {
-                      return const Padding(
-                        padding: EdgeInsets.only(top: 40),
-                        child: Center(
+                      return const Center(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 24),
                           child: Text(
                             'Belum ada layanan.\nTap tombol "+ Tambah Layanan" untuk menambahkan.',
                             textAlign: TextAlign.center,
@@ -109,22 +133,39 @@ class _ServiceListScreenState extends State<ServiceListScreen> {
                         ),
                       );
                     }
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: services.map((service) {
+
+                    final filteredServices = _filterServices(services);
+
+                    if (filteredServices.isEmpty) {
+                      return Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
+                          child: Text(
+                            'Layanan "$_searchQuery" tidak ditemukan.',
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(color: Colors.grey),
+                          ),
+                        ),
+                      );
+                    }
+
+                    return ListView.builder(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 75),
+                      itemCount: filteredServices.length,
+                      itemBuilder: (context, index) {
+                        final service = filteredServices[index];
                         return ServiceCard(
-                          serviceName: service.name,
-                          servicePrice:
-                              '${CurrencyFormatter.format(service.price)} / ${service.unit}',
+                          service: service,
+                          onChanged: _refreshServices,
                         );
-                      }).toList(),
+                      },
                     );
                   },
                 );
               },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _showAddServiceModal(context),
