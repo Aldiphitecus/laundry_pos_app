@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:laundry_pos_app/core/constants/app_colors.dart';
 import 'package:laundry_pos_app/core/constants/filter_item.dart';
 import 'package:laundry_pos_app/core/widgets/filter_chip_button.dart';
 import 'package:laundry_pos_app/core/widgets/main_app_bar.dart';
@@ -57,6 +58,24 @@ class _HomeScreenState extends State<HomeScreen> {
                     TotalTransactionsWidget(),
                     // CHART
                     ChartWidget(),
+                    // CREATE TRANSACTION BUTTON
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        print("You clicked");
+                      },
+                      label: const Text(
+                        'Buat transaksi',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      icon: const Icon(Icons.add, color: Colors.white),
+                      style: ElevatedButton.styleFrom(
+                        elevation: 3,
+                        backgroundColor: AppColors.primary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
                     const SizedBox(height: 18.0),
                     // NEWEST ACTIVITY
                     ActivityWidget(onNavigateToTab: widget.onNavigateToTab),
