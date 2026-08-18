@@ -70,12 +70,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       },
                       label: const Text(
-                        'Buat transaksi',
-                        style: TextStyle(color: Colors.white),
+                        'Transaksi Baru',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       icon: const Icon(
                         Icons.point_of_sale,
                         color: Colors.white,
+                        size: 25,
                       ),
                       style: ElevatedButton.styleFrom(
                         elevation: 3,
@@ -83,6 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
+                        padding: const EdgeInsets.symmetric(vertical: 15),
                       ),
                     ),
                     const SizedBox(height: 18.0),

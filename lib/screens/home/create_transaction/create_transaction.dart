@@ -7,8 +7,8 @@ class CreateTransaction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainAppBar(title: 'Buat Transaksi'),
-      body: Center(child: const Text('Halaman buat transaksi')),
+      appBar: MainAppBar(title: 'Transaksi Baru'),
+      body: Center(child: const Text('Halaman untuk membuat transaksi baru')),
     );
   }
 }
