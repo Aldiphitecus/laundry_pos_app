@@ -38,23 +38,26 @@ class ServiceCard extends StatelessWidget {
           ),
           title: const Text(
             'Hapus Layanan',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            style: TextStyle(fontSize: 19, fontWeight: FontWeight.w600),
           ),
           content: Text(
             'Yakin ingin menghapus "${service.name}"? Tindakan ini tidak bisa dibatalkan.',
-            style: const TextStyle(fontSize: 14, color: Colors.black87),
+            style: const TextStyle(fontSize: 16, color: Colors.black87),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(dialogContext),
-              child: const Text('Batal'),
+              child: const Text('Batal', style: TextStyle(fontSize: 17)),
             ),
             TextButton(
               onPressed: () async {
                 Navigator.pop(dialogContext);
                 await _handleDelete(context);
               },
-              child: const Text('Hapus', style: TextStyle(color: Colors.red)),
+              child: const Text(
+                'Hapus',
+                style: TextStyle(color: Colors.red, fontSize: 17),
+              ),
             ),
           ],
         );
