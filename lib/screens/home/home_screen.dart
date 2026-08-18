@@ -3,6 +3,7 @@ import 'package:laundry_pos_app/core/constants/app_colors.dart';
 import 'package:laundry_pos_app/core/constants/filter_item.dart';
 import 'package:laundry_pos_app/core/widgets/filter_chip_button.dart';
 import 'package:laundry_pos_app/core/widgets/main_app_bar.dart';
+import 'package:laundry_pos_app/screens/home/create_transaction/create_transaction.dart';
 import 'package:laundry_pos_app/screens/home/widgets/activity_widget.dart';
 import 'package:laundry_pos_app/screens/home/widgets/information_widget.dart';
 import 'package:laundry_pos_app/screens/home/widgets/total_transactions_widget.dart';
@@ -61,13 +62,21 @@ class _HomeScreenState extends State<HomeScreen> {
                     // CREATE TRANSACTION BUTTON
                     ElevatedButton.icon(
                       onPressed: () {
-                        print("You clicked");
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const CreateTransaction(),
+                          ),
+                        );
                       },
                       label: const Text(
                         'Buat transaksi',
                         style: TextStyle(color: Colors.white),
                       ),
-                      icon: const Icon(Icons.add, color: Colors.white),
+                      icon: const Icon(
+                        Icons.point_of_sale,
+                        color: Colors.white,
+                      ),
                       style: ElevatedButton.styleFrom(
                         elevation: 3,
                         backgroundColor: AppColors.primary,
@@ -77,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     const SizedBox(height: 18.0),
-                    // NEWEST ACTIVITY
+                    // NEWEST ACTIVITIES
                     ActivityWidget(onNavigateToTab: widget.onNavigateToTab),
                   ],
                 ),
