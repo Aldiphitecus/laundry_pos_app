@@ -59,6 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     TotalTransactionsWidget(),
                     // CHART
                     ChartWidget(),
+                    const SizedBox(height: 3.0),
                     // CREATE TRANSACTION BUTTON
                     ElevatedButton.icon(
                       onPressed: () {
