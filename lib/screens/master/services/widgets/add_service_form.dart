@@ -124,8 +124,8 @@ class _AddServiceFormState extends State<AddServiceForm> {
             const SizedBox(height: 6),
             SegmentedButton<String>(
               segments: const [
-                ButtonSegment(value: 'item', label: Text('Per Item')),
                 ButtonSegment(value: 'kg', label: Text('Per Kg')),
+                ButtonSegment(value: 'item', label: Text('Per Item')),
               ],
               selected: {_priceUnit},
               onSelectionChanged: _isSaving
