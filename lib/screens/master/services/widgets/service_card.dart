@@ -85,9 +85,6 @@ class ServiceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formattedPrice =
-        '${CurrencyFormatter.format(service.price)} / ${service.unit}';
-
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
@@ -140,7 +137,7 @@ class ServiceCard extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(6),
                                   ),
                                   child: Text(
-                                    formattedPrice,
+                                    '${CurrencyFormatter.format(service.price)} / ${service.unit}',
                                     style: const TextStyle(
                                       color: Colors.green,
                                       fontSize: 16,

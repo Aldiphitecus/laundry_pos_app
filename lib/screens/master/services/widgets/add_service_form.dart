@@ -69,7 +69,7 @@ class _AddServiceFormState extends State<AddServiceForm> {
         key: _formKey,
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const Text(
               'Tambah Layanan',
@@ -126,6 +126,7 @@ class _AddServiceFormState extends State<AddServiceForm> {
               segments: const [
                 ButtonSegment(value: 'kg', label: Text('Per Kg')),
                 ButtonSegment(value: 'item', label: Text('Per Item')),
+                ButtonSegment(value: 'pasang', label: Text('Per Pasang')),
               ],
               selected: {_priceUnit},
               onSelectionChanged: _isSaving
