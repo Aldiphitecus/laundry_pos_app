@@ -62,7 +62,7 @@ class _AddServiceFormState extends State<AddServiceForm> {
       padding: EdgeInsets.only(
         left: 20,
         right: 20,
-        top: 20,
+        top: 10,
         bottom: MediaQuery.of(context).viewInsets.bottom + 20,
       ),
       child: Form(
@@ -71,6 +71,18 @@ class _AddServiceFormState extends State<AddServiceForm> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            Align(
+              alignment: Alignment.center,
+              child: Container(
+                width: 60,
+                height: 6,
+                decoration: BoxDecoration(
+                  color: Colors.grey[400],
+                  borderRadius: BorderRadius.circular(5),
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
             const Text(
               'Tambah Layanan',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
