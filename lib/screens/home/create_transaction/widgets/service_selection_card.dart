@@ -24,7 +24,9 @@ class ServiceSelectionCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
         side: BorderSide(
-          color: isSelected ? AppColors.primary : Colors.grey,
+          color: isSelected
+              ? AppColors.primary
+              : Colors.grey.withValues(alpha: 0.5),
           width: isSelected ? 2 : 1,
         ),
       ),
@@ -45,7 +47,9 @@ class ServiceSelectionCard extends StatelessWidget {
                         ? Icons.check_circle_outline
                         : Icons.circle_outlined,
                     size: 30,
-                    color: isSelected ? AppColors.primary : Colors.grey,
+                    color: isSelected
+                        ? AppColors.primary
+                        : Colors.grey.withValues(alpha: 0.5),
                   ),
                 ],
               ),
