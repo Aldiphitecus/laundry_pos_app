@@ -1,7 +1,24 @@
+import 'package:dartz/dartz.dart' hide State;
 import 'package:flutter/material.dart';
+import 'package:laundry_pos_app/core/services/database_service.dart';
+import 'package:laundry_pos_app/models/service_model.dart';
+import 'package:laundry_pos_app/screens/home/create_transaction/widgets/service_selection_card.dart';
 
-class ServicesSelection extends StatelessWidget {
+class ServicesSelection extends StatefulWidget {
   const ServicesSelection({super.key});
+
+  @override
+  State<ServicesSelection> createState() => _ServicesSelectionState();
+}
+
+class _ServicesSelectionState extends State<ServicesSelection> {
+  late Future<Either<String, List<ServiceModel>>> _servicesFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _servicesFuture = DatabaseService.instance.getAllServices();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +50,50 @@ class ServicesSelection extends StatelessWidget {
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 16),
+          FutureBuilder<Either<String, List<ServiceModel>>>(
+            future: _servicesFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(
+                  heightFactor: 5,
+                  child: CircularProgressIndicator(),
+                );
+              }
+
+              final result = snapshot.data;
+              if (result == null) return const SizedBox();
+
+              return result.fold(
+                (error) => Center(
+                  heightFactor: 5,
+                  child: Text('Gagal memuat data: $error'),
+                ),
+                (services) {
+                  if (services.isEmpty) {
+                    return const Center(
+                      heightFactor: 5,
+                      child: Text('Belum ada layanan.'),
+                    );
+                  }
+                  return GridView.count(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 5,
+                    mainAxisSpacing: 5,
+                    mainAxisExtent: 118,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: services.map((service) {
+                      return ServiceSelectionCard(
+                        serviceName: service.name,
+                        servicePrice: service.price,
+                        serviceUnit: service.unit,
+                      );
+                    }).toList(),
+                  );
+                },
+              );
+            },
+          ),
         ],
       ),
     );
