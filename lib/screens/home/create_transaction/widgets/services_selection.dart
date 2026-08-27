@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart' hide State;
 import 'package:flutter/material.dart';
+import 'package:laundry_pos_app/core/constants/app_colors.dart';
 import 'package:laundry_pos_app/core/services/database_service.dart';
 import 'package:laundry_pos_app/models/service_model.dart';
 import 'package:laundry_pos_app/screens/home/create_transaction/widgets/service_selection_card.dart';
@@ -93,6 +94,27 @@ class _ServicesSelectionState extends State<ServicesSelection> {
                 },
               );
             },
+          ),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  onPressed: () {
+                    debugPrint('YOU CLICKED');
+                  },
+                  child: const Text('Selesai'),
+                ),
+              ),
+            ],
           ),
         ],
       ),

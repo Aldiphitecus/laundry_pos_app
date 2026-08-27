@@ -26,7 +26,7 @@ class CreateTransaction extends StatelessWidget {
         onPressed: () => _showServicesModal(context),
         label: const Text(
           'Pilih Layanan',
-          style: const TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.white),
         ),
         icon: Icon(Icons.add, color: Colors.white),
         backgroundColor: AppColors.primary,
