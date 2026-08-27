@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:laundry_pos_app/core/constants/app_colors.dart';
 import 'package:laundry_pos_app/core/services/database_service.dart';
 import 'package:laundry_pos_app/models/service_model.dart';
+import 'package:laundry_pos_app/models/service_selected_model.dart';
 import 'package:laundry_pos_app/screens/home/create_transaction/widgets/service_selection_card.dart';
 
 class ServicesSelection extends StatefulWidget {
@@ -14,6 +15,7 @@ class ServicesSelection extends StatefulWidget {
 
 class _ServicesSelectionState extends State<ServicesSelection> {
   late Future<Either<String, List<ServiceModel>>> _servicesFuture;
+  final List<ServiceSelectedModel> _selectedServices = [];
 
   @override
   void initState() {
@@ -21,8 +23,31 @@ class _ServicesSelectionState extends State<ServicesSelection> {
     _servicesFuture = DatabaseService.instance.getAllServices();
   }
 
+  void _toggleService(ServiceModel service) {
+    setState(() {
+      final index = _selectedServices.indexWhere(
+        (item) => item.id == service.id,
+      );
+      if (index >= 0) {
+        _selectedServices.removeAt(index);
+      } else {
+        _selectedServices.add(
+          ServiceSelectedModel(
+            id: service.id,
+            name: service.name,
+            price: service.price,
+            unit: service.unit,
+            qty: 1,
+          ),
+        );
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final selectedCount = _selectedServices.length;
+
     return Padding(
       padding: EdgeInsets.only(
         left: 20,
@@ -84,10 +109,16 @@ class _ServicesSelectionState extends State<ServicesSelection> {
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     children: services.map((service) {
+                      final isSelected = _selectedServices.any(
+                        (item) => item.id == service.id,
+                      );
+
                       return ServiceSelectionCard(
                         serviceName: service.name,
                         servicePrice: service.price,
                         serviceUnit: service.unit,
+                        isSelected: isSelected,
+                        onTap: () => _toggleService(service),
                       );
                     }).toList(),
                   );
@@ -111,7 +142,11 @@ class _ServicesSelectionState extends State<ServicesSelection> {
                   onPressed: () {
                     debugPrint('YOU CLICKED');
                   },
-                  child: const Text('Selesai'),
+                  child: Text(
+                    selectedCount > 0
+                        ? 'Selesai terpilih ($selectedCount)'
+                        : 'Selesai',
+                  ),
                 ),
               ),
             ],

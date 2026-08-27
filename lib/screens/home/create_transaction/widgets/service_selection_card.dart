@@ -6,12 +6,16 @@ class ServiceSelectionCard extends StatelessWidget {
   final String serviceName;
   final int servicePrice;
   final String serviceUnit;
+  final bool isSelected;
+  final VoidCallback onTap;
 
   const ServiceSelectionCard({
     super.key,
     required this.serviceName,
     required this.servicePrice,
     required this.serviceUnit,
+    required this.isSelected,
+    required this.onTap,
   });
 
   @override
@@ -19,34 +23,43 @@ class ServiceSelectionCard extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: const BorderSide(color: AppColors.primary, width: 1),
+        side: BorderSide(
+          color: isSelected ? AppColors.primary : Colors.grey,
+          width: isSelected ? 2 : 1,
+        ),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: const [
-                Icon(
-                  Icons.check_circle_outline,
-                  size: 30,
-                  color: AppColors.primary,
-                ),
-              ],
-            ),
-            const SizedBox(height: 5),
-            Text(
-              serviceName,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-            ),
-            Text(
-              '${CurrencyFormatter.format(servicePrice)}/$serviceUnit',
-              style: const TextStyle(fontSize: 15, color: AppColors.primary),
-            ),
-          ],
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Icon(
+                    isSelected
+                        ? Icons.check_circle_outline
+                        : Icons.circle_outlined,
+                    size: 30,
+                    color: isSelected ? AppColors.primary : Colors.grey,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 5),
+              Text(
+                serviceName,
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              ),
+              Text(
+                '${CurrencyFormatter.format(servicePrice)}/$serviceUnit',
+                style: const TextStyle(fontSize: 15, color: AppColors.primary),
+              ),
+            ],
+          ),
         ),
       ),
     );
