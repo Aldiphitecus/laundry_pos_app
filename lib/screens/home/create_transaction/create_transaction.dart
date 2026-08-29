@@ -64,40 +64,53 @@ class _CreateTransactionState extends State<CreateTransaction> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Text(
-              'Layanan Dipilih',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-            ),
+            if (_selectedServices.isNotEmpty)
+              const Text(
+                'Layanan Dipilih',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              ),
             const SizedBox(height: 5),
             Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.only(bottom: 73),
-                itemCount: _selectedServices.length,
-                itemBuilder: (context, index) {
-                  final item = _selectedServices[index];
-                  return SelectedServiceCard(
-                    serviceName: item.name,
-                    servicePrice: item.price,
-                    serviceUnit: item.unit,
-                    qty: item.qty,
-                    onQtyChanged: (newQty) {
-                      setState(() {
-                        final index = _selectedServices.indexWhere(
-                          (s) => s.id == item.id,
+              child: _selectedServices.isEmpty
+                  ? const Center(
+                      child: Text(
+                        'Belum ada layanan yang dipilih, silahkan pilih layanan untuk membuat transaksi.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.grey, fontSize: 14),
+                      ),
+                    )
+                  : ListView.builder(
+                      padding: const EdgeInsets.only(bottom: 73),
+                      itemCount: _selectedServices.length,
+                      itemBuilder: (context, index) {
+                        final item = _selectedServices[index];
+                        return SelectedServiceCard(
+                          serviceName: item.name,
+                          servicePrice: item.price,
+                          serviceUnit: item.unit,
+                          qty: item.qty,
+                          onQtyChanged: (newQty) {
+                            setState(() {
+                              final index = _selectedServices.indexWhere(
+                                (s) => s.id == item.id,
+                              );
+                              if (index == -1) return;
+                              _selectedServices[index] =
+                                  _selectedServices[index].copyWith(
+                                    qty: newQty,
+                                  );
+                            });
+                          },
+                          onRemove: () {
+                            setState(() {
+                              _selectedServices.removeWhere(
+                                (s) => s.id == item.id,
+                              );
+                            });
+                          },
                         );
-                        if (index == -1) return;
-                        _selectedServices[index] = _selectedServices[index]
-                            .copyWith(qty: newQty);
-                      });
-                    },
-                    onRemove: () {
-                      setState(() {
-                        _selectedServices.removeWhere((s) => s.id == item.id);
-                      });
-                    },
-                  );
-                },
-              ),
+                      },
+                    ),
             ),
           ],
         ),
