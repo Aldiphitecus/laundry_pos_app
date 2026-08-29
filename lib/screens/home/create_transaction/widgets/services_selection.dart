@@ -104,26 +104,32 @@ class _ServicesSelectionState extends State<ServicesSelection> {
                       child: Text('Belum ada layanan.'),
                     );
                   }
-                  return GridView.count(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 5,
-                    mainAxisSpacing: 5,
-                    mainAxisExtent: 118,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: services.map((service) {
-                      final isSelected = _selectedServices.any(
-                        (item) => item.id == service.id,
-                      );
+                  return LayoutBuilder(
+                    builder: (context, constraints) {
+                      const spacing = 5.0;
+                      final itemWidth = (constraints.maxWidth - spacing) / 2;
 
-                      return ServiceSelectionCard(
-                        serviceName: service.name,
-                        servicePrice: service.price,
-                        serviceUnit: service.unit,
-                        isSelected: isSelected,
-                        onTap: () => _toggleService(service),
+                      return Wrap(
+                        spacing: spacing,
+                        runSpacing: spacing,
+                        children: services.map((service) {
+                          final isSelected = _selectedServices.any(
+                            (item) => item.id == service.id,
+                          );
+
+                          return SizedBox(
+                            width: itemWidth,
+                            child: ServiceSelectionCard(
+                              serviceName: service.name,
+                              servicePrice: service.price,
+                              serviceUnit: service.unit,
+                              isSelected: isSelected,
+                              onTap: () => _toggleService(service),
+                            ),
+                          );
+                        }).toList(),
                       );
-                    }).toList(),
+                    },
                   );
                 },
               );

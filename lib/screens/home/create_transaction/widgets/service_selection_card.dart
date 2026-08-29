@@ -56,11 +56,11 @@ class ServiceSelectionCard extends StatelessWidget {
               const SizedBox(height: 5),
               Text(
                 serviceName,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
               Text(
                 '${CurrencyFormatter.format(servicePrice)}/$serviceUnit',
-                style: const TextStyle(fontSize: 15, color: AppColors.primary),
+                style: const TextStyle(fontSize: 14, color: AppColors.primary),
               ),
             ],
           ),
