@@ -19,7 +19,7 @@ class ActionButtonWidget extends StatelessWidget {
     return OutlinedButton.icon(
       onPressed: buttonAction,
       icon: Icon(buttonIcon),
-      label: Text(buttonTitle, style: TextStyle(fontSize: 15)),
+      label: Text(buttonTitle, style: TextStyle(fontSize: 13)),
       style: OutlinedButton.styleFrom(
         foregroundColor: buttonColor,
         backgroundColor: buttonColor.withValues(alpha: 0.15),

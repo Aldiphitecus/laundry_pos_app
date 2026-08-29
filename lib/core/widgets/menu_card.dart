@@ -41,14 +41,14 @@ class MenuCard extends StatelessWidget {
                   child: Icon(menuIcon, size: 35.0, color: iconColor),
                 ),
               ),
-              const SizedBox(height: 15.0),
+              const SizedBox(height: 5.0),
               Text(
                 menuTitle,
-                style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.w600),
+                style: TextStyle(fontSize: 19, fontWeight: FontWeight.w600),
               ),
               Text(
                 menuDescription,
-                style: TextStyle(fontSize: 18, color: Colors.grey[700]),
+                style: TextStyle(fontSize: 15, color: Colors.grey[700]),
               ),
             ],
           ),

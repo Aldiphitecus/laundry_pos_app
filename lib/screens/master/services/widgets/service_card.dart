@@ -122,7 +122,7 @@ class ServiceCard extends StatelessWidget {
                                 Text(
                                   service.name,
                                   style: const TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 19,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -140,7 +140,7 @@ class ServiceCard extends StatelessWidget {
                                     '${CurrencyFormatter.format(service.price)} / ${service.unit}',
                                     style: const TextStyle(
                                       color: Colors.green,
-                                      fontSize: 16,
+                                      fontSize: 15,
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
