@@ -7,8 +7,8 @@ class SelectedServiceCard extends StatelessWidget {
   final String serviceName;
   final int servicePrice;
   final String serviceUnit;
-  final int qty;
-  final ValueChanged<int> onQtyChanged;
+  final double qty;
+  final ValueChanged<double> onQtyChanged;
   final VoidCallback onRemove;
 
   const SelectedServiceCard({
@@ -23,7 +23,7 @@ class SelectedServiceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final subtotal = servicePrice * qty;
+    final subtotal = (servicePrice * qty).round();
 
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
@@ -107,7 +107,11 @@ class SelectedServiceCard extends StatelessWidget {
                             constraints: const BoxConstraints(),
                           ),
                           const SizedBox(height: 12),
-                          _QtyControl(qty: qty, onChanged: onQtyChanged),
+                          _QtyControl(
+                            qty: qty,
+                            unit: serviceUnit,
+                            onChanged: onQtyChanged,
+                          ),
                         ],
                       ),
                     ],
@@ -123,10 +127,15 @@ class SelectedServiceCard extends StatelessWidget {
 }
 
 class _QtyControl extends StatefulWidget {
-  final int qty;
-  final ValueChanged<int> onChanged;
+  final double qty;
+  final String unit;
+  final ValueChanged<double> onChanged;
 
-  const _QtyControl({required this.qty, required this.onChanged});
+  const _QtyControl({
+    required this.qty,
+    required this.unit,
+    required this.onChanged,
+  });
 
   @override
   State<_QtyControl> createState() => _QtyControlState();
@@ -135,18 +144,21 @@ class _QtyControl extends StatefulWidget {
 class _QtyControlState extends State<_QtyControl> {
   late final TextEditingController _controller;
 
+  // Cuma unit 'kg' yang boleh desimal, selain itu (item, pasang, dst) bulat.
+  bool get _isDecimalUnit => widget.unit.toLowerCase() == 'kg';
+
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController(text: widget.qty.toString());
+    _controller = TextEditingController(text: _formatQty(widget.qty));
   }
 
   @override
   void didUpdateWidget(covariant _QtyControl oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final currentValue = int.tryParse(_controller.text);
+    final currentValue = double.tryParse(_controller.text);
     if (widget.qty != currentValue) {
-      _controller.text = widget.qty.toString();
+      _controller.text = _formatQty(widget.qty);
       _controller.selection = TextSelection.collapsed(
         offset: _controller.text.length,
       );
@@ -159,8 +171,17 @@ class _QtyControlState extends State<_QtyControl> {
     super.dispose();
   }
 
+  String _formatQty(double value) {
+    if (!_isDecimalUnit) return value.toInt().toString();
+    if (value == value.roundToDouble()) return value.toInt().toString();
+    String text = value.toStringAsFixed(3);
+    text = text.replaceFirst(RegExp(r'0+$'), '');
+    text = text.replaceFirst(RegExp(r'\.$'), '');
+    return text;
+  }
+
   void _handleTyped(String value) {
-    final parsed = int.tryParse(value);
+    final parsed = double.tryParse(value);
     if (parsed == null || parsed <= 0) {
       return;
     }
@@ -168,30 +189,38 @@ class _QtyControlState extends State<_QtyControl> {
   }
 
   void _handleFocusLost(String value) {
-    final parsed = int.tryParse(value);
+    final parsed = double.tryParse(value);
     if (parsed == null || parsed <= 0) {
-      _controller.text = widget.qty.toString();
-      _controller.selection = TextSelection.collapsed(
-        offset: _controller.text.length,
-      );
+      _controller.text = _formatQty(widget.qty);
+    } else {
+      _controller.text = _formatQty(parsed);
     }
+    _controller.selection = TextSelection.collapsed(
+      offset: _controller.text.length,
+    );
   }
 
   void _increment() {
-    final newQty = widget.qty + 1;
-    _controller.text = newQty.toString();
+    final step = _isDecimalUnit ? 0.5 : 1.0;
+    final newQty = widget.qty + step;
+    _controller.text = _formatQty(newQty);
     widget.onChanged(newQty);
   }
 
   void _decrement() {
-    if (widget.qty <= 1) return;
-    final newQty = widget.qty - 1;
-    _controller.text = newQty.toString();
+    final step = _isDecimalUnit ? 0.5 : 1.0;
+    if (widget.qty <= step) return;
+    final newQty = widget.qty - step;
+    _controller.text = _formatQty(newQty);
     widget.onChanged(newQty);
   }
 
   @override
   Widget build(BuildContext context) {
+    final inputFormatters = _isDecimalUnit
+        ? [FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,3}'))]
+        : [FilteringTextInputFormatter.digitsOnly];
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.grey.withValues(alpha: 0.08),
@@ -202,12 +231,14 @@ class _QtyControlState extends State<_QtyControl> {
         children: [
           _QtyButton(icon: Icons.remove_rounded, onTap: _decrement),
           SizedBox(
-            width: 32,
+            width: _isDecimalUnit ? 52 : 32,
             child: TextField(
               controller: _controller,
               textAlign: TextAlign.center,
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(
+                decimal: _isDecimalUnit,
+              ),
+              inputFormatters: inputFormatters,
               style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
               decoration: const InputDecoration(
                 isDense: true,

@@ -3,7 +3,7 @@ class ServiceSelectedModel {
   final String name;
   final int price;
   final String unit;
-  final int qty;
+  final double qty;
 
   const ServiceSelectedModel({
     this.id,
@@ -19,7 +19,7 @@ class ServiceSelectedModel {
       name: map['name'],
       price: map['price'],
       unit: map['unit'],
-      qty: map['qty'],
+      qty: (map['qty'] as num).toDouble(),
     );
   }
 
@@ -32,7 +32,7 @@ class ServiceSelectedModel {
     String? name,
     int? price,
     String? unit,
-    int? qty,
+    double? qty,
   }) {
     return ServiceSelectedModel(
       id: id ?? this.id,
