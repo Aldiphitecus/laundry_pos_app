@@ -57,6 +57,8 @@ class _CreateTransactionState extends State<CreateTransaction> {
 
   @override
   Widget build(BuildContext context) {
+    final selectedCount = _selectedServices.length;
+
     return Scaffold(
       appBar: MainAppBar(title: 'Transaksi Baru'),
       body: Padding(
@@ -64,9 +66,9 @@ class _CreateTransactionState extends State<CreateTransaction> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (_selectedServices.isNotEmpty)
-              const Text(
-                'Layanan Dipilih',
+            if (_selectedServices.isNotEmpty && selectedCount > 0)
+              Text(
+                '$selectedCount layanan terpilih',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
             const SizedBox(height: 5),
