@@ -7,7 +7,9 @@ import 'package:laundry_pos_app/models/service_selected_model.dart';
 import 'package:laundry_pos_app/screens/home/create_transaction/widgets/service_selection_card.dart';
 
 class ServicesSelection extends StatefulWidget {
-  const ServicesSelection({super.key});
+  final List<ServiceSelectedModel> initialSelected;
+
+  const ServicesSelection({super.key, this.initialSelected = const []});
 
   @override
   State<ServicesSelection> createState() => _ServicesSelectionState();
@@ -15,12 +17,13 @@ class ServicesSelection extends StatefulWidget {
 
 class _ServicesSelectionState extends State<ServicesSelection> {
   late Future<Either<String, List<ServiceModel>>> _servicesFuture;
-  final List<ServiceSelectedModel> _selectedServices = [];
+  late List<ServiceSelectedModel> _selectedServices;
 
   @override
   void initState() {
     super.initState();
     _servicesFuture = DatabaseService.instance.getAllServices();
+    _selectedServices = List.from(widget.initialSelected);
   }
 
   void _toggleService(ServiceModel service) {
@@ -140,7 +143,7 @@ class _ServicesSelectionState extends State<ServicesSelection> {
                     ),
                   ),
                   onPressed: () {
-                    debugPrint('YOU CLICKED');
+                    Navigator.pop(context, _selectedServices);
                   },
                   child: Text(
                     selectedCount > 0

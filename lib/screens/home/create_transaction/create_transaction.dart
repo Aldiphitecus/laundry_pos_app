@@ -13,46 +13,23 @@ class CreateTransaction extends StatefulWidget {
 }
 
 class _CreateTransactionState extends State<CreateTransaction> {
-  final List<ServiceSelectedModel> _selectedServices = [
-    ServiceSelectedModel(
-      id: 1,
-      name: 'Cuci Setrika',
-      price: 5000,
-      unit: 'kg',
-      qty: 1,
-    ),
-    ServiceSelectedModel(
-      id: 2,
-      name: 'Cuci Kering',
-      price: 4000,
-      unit: 'kg',
-      qty: 2,
-    ),
-    ServiceSelectedModel(
-      id: 3,
-      name: 'Cuci Kering Selimut',
-      price: 6000,
-      unit: 'item',
-      qty: 1,
-    ),
-    ServiceSelectedModel(
-      id: 4,
-      name: 'Cuci Kering Sepatu',
-      price: 8000,
-      unit: 'pasang',
-      qty: 1,
-    ),
-  ];
+  List<ServiceSelectedModel> _selectedServices = [];
 
   void _showServicesModal(BuildContext context) async {
-    await showModalBottomSheet(
+    final result = await showModalBottomSheet<List<ServiceSelectedModel>>(
       context: context,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (context) => ServicesSelection(),
+      builder: (context) =>
+          ServicesSelection(initialSelected: _selectedServices),
     );
+    if (result != null) {
+      setState(() {
+        _selectedServices = result;
+      });
+    }
   }
 
   @override
