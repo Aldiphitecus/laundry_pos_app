@@ -26,4 +26,20 @@ class ServiceSelectedModel {
   Map<String, dynamic> toMap() {
     return {'id': id, 'name': name, 'price': price, 'unit': unit, 'qty': qty};
   }
+
+  ServiceSelectedModel copyWith({
+    int? id,
+    String? name,
+    int? price,
+    String? unit,
+    int? qty,
+  }) {
+    return ServiceSelectedModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      price: price ?? this.price,
+      unit: unit ?? this.unit,
+      qty: qty ?? this.qty,
+    );
+  }
 }

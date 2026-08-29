@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:laundry_pos_app/core/constants/app_colors.dart';
 import 'package:laundry_pos_app/core/utils/currency_formatter.dart';
 
@@ -7,8 +8,7 @@ class SelectedServiceCard extends StatelessWidget {
   final int servicePrice;
   final String serviceUnit;
   final int qty;
-  final VoidCallback onIncrement;
-  final VoidCallback onDecrement;
+  final ValueChanged<int> onQtyChanged;
   final VoidCallback onRemove;
 
   const SelectedServiceCard({
@@ -17,8 +17,7 @@ class SelectedServiceCard extends StatelessWidget {
     required this.servicePrice,
     required this.serviceUnit,
     required this.qty,
-    required this.onIncrement,
-    required this.onDecrement,
+    required this.onQtyChanged,
     required this.onRemove,
   });
 
@@ -60,15 +59,15 @@ class SelectedServiceCard extends StatelessWidget {
                             Text(
                               serviceName,
                               style: const TextStyle(
-                                fontSize: 18,
+                                fontSize: 16,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
                             const SizedBox(height: 2),
                             Text(
-                              '${CurrencyFormatter.format(servicePrice)}/$serviceUnit',
+                              '${CurrencyFormatter.format(servicePrice)} / $serviceUnit',
                               style: TextStyle(
-                                fontSize: 15,
+                                fontSize: 12,
                                 color: Colors.grey[600],
                               ),
                             ),
@@ -102,44 +101,13 @@ class SelectedServiceCard extends StatelessWidget {
                             icon: const Icon(
                               Icons.close_rounded,
                               size: 20,
-                              color: Colors.grey,
+                              color: Colors.red,
                             ),
                             padding: EdgeInsets.zero,
                             constraints: const BoxConstraints(),
                           ),
                           const SizedBox(height: 12),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.grey.withValues(alpha: 0.08),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                _QtyButton(
-                                  icon: Icons.remove_rounded,
-                                  iconColor: Colors.red,
-                                  onTap: onDecrement,
-                                ),
-                                SizedBox(
-                                  width: 28,
-                                  child: Text(
-                                    '$qty',
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ),
-                                _QtyButton(
-                                  icon: Icons.add_rounded,
-                                  iconColor: Colors.green,
-                                  onTap: onIncrement,
-                                ),
-                              ],
-                            ),
-                          ),
+                          _QtyControl(qty: qty, onChanged: onQtyChanged),
                         ],
                       ),
                     ],
@@ -154,16 +122,115 @@ class SelectedServiceCard extends StatelessWidget {
   }
 }
 
+class _QtyControl extends StatefulWidget {
+  final int qty;
+  final ValueChanged<int> onChanged;
+
+  const _QtyControl({required this.qty, required this.onChanged});
+
+  @override
+  State<_QtyControl> createState() => _QtyControlState();
+}
+
+class _QtyControlState extends State<_QtyControl> {
+  late final TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: widget.qty.toString());
+  }
+
+  @override
+  void didUpdateWidget(covariant _QtyControl oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final currentValue = int.tryParse(_controller.text);
+    if (widget.qty != currentValue) {
+      _controller.text = widget.qty.toString();
+      _controller.selection = TextSelection.collapsed(
+        offset: _controller.text.length,
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _handleTyped(String value) {
+    final parsed = int.tryParse(value);
+    if (parsed == null || parsed <= 0) {
+      return;
+    }
+    widget.onChanged(parsed);
+  }
+
+  void _handleFocusLost(String value) {
+    final parsed = int.tryParse(value);
+    if (parsed == null || parsed <= 0) {
+      _controller.text = widget.qty.toString();
+      _controller.selection = TextSelection.collapsed(
+        offset: _controller.text.length,
+      );
+    }
+  }
+
+  void _increment() {
+    final newQty = widget.qty + 1;
+    _controller.text = newQty.toString();
+    widget.onChanged(newQty);
+  }
+
+  void _decrement() {
+    if (widget.qty <= 1) return;
+    final newQty = widget.qty - 1;
+    _controller.text = newQty.toString();
+    widget.onChanged(newQty);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _QtyButton(icon: Icons.remove_rounded, onTap: _decrement),
+          SizedBox(
+            width: 32,
+            child: TextField(
+              controller: _controller,
+              textAlign: TextAlign.center,
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+              decoration: const InputDecoration(
+                isDense: true,
+                contentPadding: EdgeInsets.symmetric(vertical: 6),
+                border: InputBorder.none,
+              ),
+              onChanged: _handleTyped,
+              onSubmitted: _handleFocusLost,
+              onTapOutside: (_) => _handleFocusLost(_controller.text),
+            ),
+          ),
+          _QtyButton(icon: Icons.add_rounded, onTap: _increment),
+        ],
+      ),
+    );
+  }
+}
+
 class _QtyButton extends StatelessWidget {
   final IconData icon;
-  final Color iconColor;
   final VoidCallback onTap;
 
-  const _QtyButton({
-    required this.icon,
-    required this.iconColor,
-    required this.onTap,
-  });
+  const _QtyButton({required this.icon, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -172,7 +239,7 @@ class _QtyButton extends StatelessWidget {
       borderRadius: BorderRadius.circular(8),
       child: Padding(
         padding: const EdgeInsets.all(6),
-        child: Icon(icon, size: 17, color: iconColor),
+        child: Icon(icon, size: 16, color: AppColors.primary),
       ),
     );
   }
