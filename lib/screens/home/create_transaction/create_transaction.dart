@@ -80,7 +80,16 @@ class _CreateTransactionState extends State<CreateTransaction> {
                     servicePrice: item.price,
                     serviceUnit: item.unit,
                     qty: item.qty,
-                    onQtyChanged: (newQty) {},
+                    onQtyChanged: (newQty) {
+                      setState(() {
+                        final index = _selectedServices.indexWhere(
+                          (s) => s.id == item.id,
+                        );
+                        if (index == -1) return;
+                        _selectedServices[index] = _selectedServices[index]
+                            .copyWith(qty: newQty);
+                      });
+                    },
                     onRemove: () {
                       setState(() {
                         _selectedServices.removeWhere((s) => s.id == item.id);
