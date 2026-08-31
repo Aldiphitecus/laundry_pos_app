@@ -1,22 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:laundry_pos_app/core/constants/app_colors.dart';
 import 'package:laundry_pos_app/core/utils/currency_formatter.dart';
-
-class ServiceDetailItem {
-  final String name;
-  final int qty;
-  final int price;
-  final String unit;
-
-  const ServiceDetailItem({
-    required this.name,
-    required this.qty,
-    required this.price,
-    required this.unit,
-  });
-
-  int get total => qty * price;
-}
+import 'package:laundry_pos_app/core/utils/qty_formatter.dart';
+import 'package:laundry_pos_app/models/service_selected_model.dart';
 
 class BottomSummaryWidgets extends StatefulWidget {
   const BottomSummaryWidgets({super.key});
@@ -28,15 +14,20 @@ class BottomSummaryWidgets extends StatefulWidget {
 class _BottomSummaryWidgetsState extends State<BottomSummaryWidgets> {
   bool _isExpanded = false;
 
-  final List<ServiceDetailItem> _services = const [
-    ServiceDetailItem(
+  final List<ServiceSelectedModel> _services = const [
+    ServiceSelectedModel(
       name: 'Cuci Kering (kg)',
       qty: 3,
       price: 7000,
       unit: 'kg',
     ),
-    ServiceDetailItem(name: 'Setrika (kg)', qty: 3, price: 5000, unit: 'item'),
-    ServiceDetailItem(
+    ServiceSelectedModel(
+      name: 'Setrika (kg)',
+      qty: 3,
+      price: 100000,
+      unit: 'item',
+    ),
+    ServiceSelectedModel(
       name: 'Express 6 Jam',
       qty: 1,
       price: 15000,
@@ -44,7 +35,8 @@ class _BottomSummaryWidgetsState extends State<BottomSummaryWidgets> {
     ),
   ];
 
-  int get _totalPrice => _services.fold(0, (sum, item) => sum + item.total);
+  int get _totalPrice =>
+      _services.fold(0, (sum, item) => sum + (item.qty * item.price).round());
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +114,7 @@ class _BottomSummaryWidgetsState extends State<BottomSummaryWidgets> {
                                         ),
                                       ),
                                       Text(
-                                        '${item.qty} ${item.unit} x ${CurrencyFormatter.format(item.price)}',
+                                        '${QtyFormatter.format(item.qty, item.unit)} ${item.unit} x ${CurrencyFormatter.format(item.price)}',
                                         style: TextStyle(
                                           fontSize: 14,
                                           color: Colors.grey[800],
@@ -132,7 +124,9 @@ class _BottomSummaryWidgetsState extends State<BottomSummaryWidgets> {
                                   ),
                                 ),
                                 Text(
-                                  CurrencyFormatter.format(item.total),
+                                  CurrencyFormatter.format(
+                                    (item.qty * item.price).round(),
+                                  ),
                                   style: TextStyle(
                                     fontSize: 13,
                                     fontWeight: FontWeight.w500,

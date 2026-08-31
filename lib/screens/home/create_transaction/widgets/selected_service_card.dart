@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:laundry_pos_app/core/constants/app_colors.dart';
 import 'package:laundry_pos_app/core/utils/currency_formatter.dart';
+import 'package:laundry_pos_app/core/utils/qty_formatter.dart';
 
 class SelectedServiceCard extends StatelessWidget {
   final String serviceName;
@@ -144,7 +145,6 @@ class _QtyControl extends StatefulWidget {
 class _QtyControlState extends State<_QtyControl> {
   late final TextEditingController _controller;
 
-  // Cuma unit 'kg' yang boleh desimal, selain itu (item, pasang, dst) bulat.
   bool get _isDecimalUnit => widget.unit.toLowerCase() == 'kg';
 
   @override
@@ -171,14 +171,7 @@ class _QtyControlState extends State<_QtyControl> {
     super.dispose();
   }
 
-  String _formatQty(double value) {
-    if (!_isDecimalUnit) return value.toInt().toString();
-    if (value == value.roundToDouble()) return value.toInt().toString();
-    String text = value.toStringAsFixed(3);
-    text = text.replaceFirst(RegExp(r'0+$'), '');
-    text = text.replaceFirst(RegExp(r'\.$'), '');
-    return text;
-  }
+  String _formatQty(double value) => QtyFormatter.format(value, widget.unit);
 
   void _handleTyped(String value) {
     final parsed = double.tryParse(value);
@@ -209,7 +202,7 @@ class _QtyControlState extends State<_QtyControl> {
 
   void _decrement() {
     final step = _isDecimalUnit ? 0.5 : 1.0;
-    if (widget.qty <= step) return;
+    if (widget.qty <= step) return; // minimal qty tidak turun ke 0 lewat tombol
     final newQty = widget.qty - step;
     _controller.text = _formatQty(newQty);
     widget.onChanged(newQty);
