@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:laundry_pos_app/core/constants/app_colors.dart';
 import 'package:laundry_pos_app/core/widgets/main_app_bar.dart';
 import 'package:laundry_pos_app/models/service_selected_model.dart';
+import 'package:laundry_pos_app/screens/home/create_transaction/widgets/bottom_summary_widgets.dart';
 import 'package:laundry_pos_app/screens/home/create_transaction/widgets/selected_service_card.dart';
 import 'package:laundry_pos_app/screens/home/create_transaction/widgets/services_selection.dart';
 
@@ -94,6 +95,9 @@ class _CreateTransactionState extends State<CreateTransaction> {
           ],
         ),
       ),
+      bottomNavigationBar: _selectedServices.isEmpty
+          ? null
+          : BottomSummaryWidgets(),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _showServicesModal(context),
         label: const Text(
