@@ -150,7 +150,7 @@ class _ServiceListScreenState extends State<ServiceListScreen> {
                     }
 
                     return ListView.builder(
-                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 75),
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 95),
                       itemCount: filteredServices.length,
                       itemBuilder: (context, index) {
                         final service = filteredServices[index];
@@ -169,7 +169,7 @@ class _ServiceListScreenState extends State<ServiceListScreen> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _showAddServiceModal(context),
-        backgroundColor: AppColors.primary,
+        backgroundColor: AppColors.tertiary,
         icon: const Icon(Icons.add, color: Colors.white),
         label: const Text(
           'Tambah Layanan',

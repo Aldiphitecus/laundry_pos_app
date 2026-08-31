@@ -146,7 +146,7 @@ class _BottomSummaryWidgetsState extends State<BottomSummaryWidgets> {
                   style: const TextStyle(
                     fontSize: 23,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.secondary,
+                    color: AppColors.primary,
                   ),
                 ),
               ],

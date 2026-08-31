@@ -105,7 +105,7 @@ class _CreateTransactionState extends State<CreateTransaction> {
           style: TextStyle(color: Colors.white),
         ),
         icon: Icon(Icons.add, color: Colors.white),
-        backgroundColor: AppColors.primary,
+        backgroundColor: AppColors.tertiary,
       ),
     );
   }
