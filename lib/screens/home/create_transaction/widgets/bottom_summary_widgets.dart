@@ -5,7 +5,13 @@ import 'package:laundry_pos_app/core/utils/qty_formatter.dart';
 import 'package:laundry_pos_app/models/service_selected_model.dart';
 
 class BottomSummaryWidgets extends StatefulWidget {
-  const BottomSummaryWidgets({super.key});
+  final List<ServiceSelectedModel> services;
+  final VoidCallback? onCreateTransaction;
+  const BottomSummaryWidgets({
+    super.key,
+    required this.services,
+    this.onCreateTransaction,
+  });
 
   @override
   State<BottomSummaryWidgets> createState() => _BottomSummaryWidgetsState();
@@ -13,30 +19,10 @@ class BottomSummaryWidgets extends StatefulWidget {
 
 class _BottomSummaryWidgetsState extends State<BottomSummaryWidgets> {
   bool _isExpanded = false;
-
-  final List<ServiceSelectedModel> _services = const [
-    ServiceSelectedModel(
-      name: 'Cuci Kering (kg)',
-      qty: 3,
-      price: 7000,
-      unit: 'kg',
-    ),
-    ServiceSelectedModel(
-      name: 'Setrika (kg)',
-      qty: 3,
-      price: 100000,
-      unit: 'item',
-    ),
-    ServiceSelectedModel(
-      name: 'Express 6 Jam',
-      qty: 1,
-      price: 15000,
-      unit: 'pasang',
-    ),
-  ];
-
-  int get _totalPrice =>
-      _services.fold(0, (sum, item) => sum + (item.qty * item.price).round());
+  int get _totalPrice => widget.services.fold(
+    0,
+    (sum, item) => sum + (item.qty * item.price).round(),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +81,7 @@ class _BottomSummaryWidgetsState extends State<BottomSummaryWidgets> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         const SizedBox(height: 4),
-                        ..._services.map(
+                        ...widget.services.map(
                           (item) => Padding(
                             padding: const EdgeInsets.symmetric(vertical: 4),
                             child: Row(

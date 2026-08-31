@@ -97,7 +97,7 @@ class _CreateTransactionState extends State<CreateTransaction> {
       ),
       bottomNavigationBar: _selectedServices.isEmpty
           ? null
-          : BottomSummaryWidgets(),
+          : BottomSummaryWidgets(services: _selectedServices),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _showServicesModal(context),
         label: const Text(
