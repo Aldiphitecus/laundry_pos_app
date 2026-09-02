@@ -13,6 +13,8 @@ class ServiceSelectedModel {
     required this.qty,
   });
 
+  int get total => (qty * price).round();
+
   factory ServiceSelectedModel.fromMap(Map<String, dynamic> map) {
     return ServiceSelectedModel(
       id: map['id'],

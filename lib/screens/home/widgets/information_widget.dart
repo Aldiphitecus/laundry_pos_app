@@ -16,7 +16,7 @@ class InformationWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'PENJUALAN HARI INI',
+                'TOTAL TRANSAKSI HARI INI',
                 style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 7.0),
