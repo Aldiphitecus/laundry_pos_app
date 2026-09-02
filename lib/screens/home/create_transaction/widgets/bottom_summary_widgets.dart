@@ -6,11 +6,12 @@ import 'package:laundry_pos_app/models/service_selected_model.dart';
 
 class BottomSummaryWidgets extends StatefulWidget {
   final List<ServiceSelectedModel> services;
-  final VoidCallback? onCreateTransaction;
+  final VoidCallback onCreateTransaction;
+
   const BottomSummaryWidgets({
     super.key,
     required this.services,
-    this.onCreateTransaction,
+    required this.onCreateTransaction,
   });
 
   @override
@@ -153,7 +154,7 @@ class _BottomSummaryWidgetsState extends State<BottomSummaryWidgets> {
             ),
             const SizedBox(height: 5),
             ElevatedButton.icon(
-              onPressed: () {},
+              onPressed: widget.onCreateTransaction,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,
