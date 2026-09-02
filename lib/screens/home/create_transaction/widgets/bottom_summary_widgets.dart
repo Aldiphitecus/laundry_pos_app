@@ -52,7 +52,7 @@ class _BottomSummaryWidgetsState extends State<BottomSummaryWidgets> {
               child: Row(
                 children: [
                   Text(
-                    'Lihat Detil',
+                    'Lihat Detil Layanan',
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
