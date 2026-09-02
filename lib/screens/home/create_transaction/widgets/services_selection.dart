@@ -50,117 +50,127 @@ class _ServicesSelectionState extends State<ServicesSelection> {
   @override
   Widget build(BuildContext context) {
     final selectedCount = _selectedServices.length;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
 
-    return Padding(
-      padding: EdgeInsets.only(
-        left: 20,
-        top: 10,
-        right: 20,
-        bottom: MediaQuery.of(context).viewInsets.bottom + 20,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Align(
-            alignment: Alignment.center,
-            child: Container(
-              width: 60,
-              height: 6,
-              decoration: BoxDecoration(
-                color: Colors.grey[400],
-                borderRadius: BorderRadius.circular(5),
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxHeight: screenHeight * 0.85),
+      child: Padding(
+        padding: EdgeInsets.only(
+          left: 20,
+          top: 10,
+          right: 20,
+          bottom: bottomInset + 20,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Align(
+              alignment: Alignment.center,
+              child: Container(
+                width: 60,
+                height: 6,
+                decoration: BoxDecoration(
+                  color: Colors.grey[400],
+                  borderRadius: BorderRadius.circular(5),
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 10),
-          const Text(
-            'Pilih Layanan',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-          ),
-          const SizedBox(height: 16),
-          FutureBuilder<Either<String, List<ServiceModel>>>(
-            future: _servicesFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                  heightFactor: 5,
-                  child: CircularProgressIndicator(),
-                );
-              }
-
-              final result = snapshot.data;
-              if (result == null) return const SizedBox();
-
-              return result.fold(
-                (error) => Center(
-                  heightFactor: 5,
-                  child: Text('Gagal memuat data: $error'),
-                ),
-                (services) {
-                  if (services.isEmpty) {
-                    return const Center(
-                      heightFactor: 5,
-                      child: Text('Belum ada layanan.'),
-                    );
-                  }
-                  return LayoutBuilder(
-                    builder: (context, constraints) {
-                      const spacing = 5.0;
-                      final itemWidth = (constraints.maxWidth - spacing) / 2;
-
-                      return Wrap(
-                        spacing: spacing,
-                        runSpacing: spacing,
-                        children: services.map((service) {
-                          final isSelected = _selectedServices.any(
-                            (item) => item.id == service.id,
-                          );
-
-                          return SizedBox(
-                            width: itemWidth,
-                            child: ServiceSelectionCard(
-                              serviceName: service.name,
-                              servicePrice: service.price,
-                              serviceUnit: service.unit,
-                              isSelected: isSelected,
-                              onTap: () => _toggleService(service),
-                            ),
-                          );
-                        }).toList(),
+            const SizedBox(height: 10),
+            const Text(
+              'Pilih Layanan',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 16),
+            Flexible(
+              child: SingleChildScrollView(
+                child: FutureBuilder<Either<String, List<ServiceModel>>>(
+                  future: _servicesFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        heightFactor: 5,
+                        child: CircularProgressIndicator(),
                       );
-                    },
-                  );
-                },
-              );
-            },
-          ),
-          const SizedBox(height: 20),
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context, _selectedServices);
+                    }
+
+                    final result = snapshot.data;
+                    if (result == null) return const SizedBox();
+
+                    return result.fold(
+                      (error) => Center(
+                        heightFactor: 5,
+                        child: Text('Gagal memuat data: $error'),
+                      ),
+                      (services) {
+                        if (services.isEmpty) {
+                          return const Center(
+                            heightFactor: 5,
+                            child: Text('Belum ada layanan.'),
+                          );
+                        }
+                        return LayoutBuilder(
+                          builder: (context, constraints) {
+                            const spacing = 5.0;
+                            final itemWidth =
+                                (constraints.maxWidth - spacing) / 2;
+
+                            return Wrap(
+                              spacing: spacing,
+                              runSpacing: spacing,
+                              children: services.map((service) {
+                                final isSelected = _selectedServices.any(
+                                  (item) => item.id == service.id,
+                                );
+
+                                return SizedBox(
+                                  width: itemWidth,
+                                  child: ServiceSelectionCard(
+                                    serviceName: service.name,
+                                    servicePrice: service.price,
+                                    serviceUnit: service.unit,
+                                    isSelected: isSelected,
+                                    onTap: () => _toggleService(service),
+                                  ),
+                                );
+                              }).toList(),
+                            );
+                          },
+                        );
+                      },
+                    );
                   },
-                  child: Text(
-                    selectedCount > 0
-                        ? 'Selesai terpilih ($selectedCount)'
-                        : 'Selesai',
-                  ),
                 ),
               ),
-            ],
-          ),
-        ],
+            ),
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context, _selectedServices);
+                    },
+                    child: Text(
+                      selectedCount > 0
+                          ? 'Selesai terpilih ($selectedCount)'
+                          : 'Selesai',
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -85,7 +85,7 @@ class _BottomSummaryWidgetsState extends State<BottomSummaryWidgets> {
                           (item) => Padding(
                             padding: const EdgeInsets.symmetric(vertical: 4),
                             child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Expanded(
                                   child: Column(
@@ -114,7 +114,7 @@ class _BottomSummaryWidgetsState extends State<BottomSummaryWidgets> {
                                     (item.qty * item.price).round(),
                                   ),
                                   style: TextStyle(
-                                    fontSize: 13,
+                                    fontSize: 14,
                                     fontWeight: FontWeight.w500,
                                     color: Colors.grey[800],
                                   ),
