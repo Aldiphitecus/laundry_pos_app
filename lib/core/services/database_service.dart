@@ -30,6 +30,32 @@ class DatabaseService {
         unit TEXT NOT NULL
       )
     ''');
+
+    await db.execute('''
+      CREATE TABLE transactions (
+        id TEXT PRIMARY KEY,
+        transaction_number TEXT NOT NULL,
+        customer_name TEXT NOT NULL,
+        transaction_date TEXT NOT NULL,
+        total INTEGER NOT NULL,
+        created_at TEXT NOT NULL
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE transaction_items (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        transaction_id TEXT NOT NULL,
+        service_id INTEGER NOT NULL,
+        service_name TEXT NOT NULL,
+        qty REAL NOT NULL,
+        unit TEXT NOT NULL,
+        price INTEGER NOT NULL,
+        total INTEGER NOT NULL,
+        FOREIGN KEY (transaction_id) REFERENCES transactions(id) ON DELETE CASCADE,
+        FOREIGN KEY (service_id) REFERENCES services(id)
+      )
+    ''');
   }
 
   Future<Either<String, int>> insertService(ServiceModel service) async {
