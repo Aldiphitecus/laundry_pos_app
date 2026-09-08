@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart' hide State;
 import 'package:flutter/material.dart';
 import 'package:laundry_pos_app/core/constants/app_colors.dart';
+import 'package:laundry_pos_app/core/repositories/service_repository.dart';
 import 'package:laundry_pos_app/core/services/database_service.dart';
 import 'package:laundry_pos_app/core/utils/currency_formatter.dart';
 import 'package:laundry_pos_app/core/widgets/main_app_bar.dart';
@@ -16,6 +17,7 @@ class ServiceListScreen extends StatefulWidget {
 }
 
 class _ServiceListScreenState extends State<ServiceListScreen> {
+  final ServiceRepository _serviceRepository = ServiceRepository();
   late Future<Either<String, List<ServiceModel>>> _servicesFuture;
   final _searchController = TextEditingController();
   String _searchQuery = '';
@@ -23,7 +25,7 @@ class _ServiceListScreenState extends State<ServiceListScreen> {
   @override
   void initState() {
     super.initState();
-    _servicesFuture = DatabaseService.instance.getAllServices();
+    _servicesFuture = _serviceRepository.getAllServices();
     _searchController.addListener(_onSearchChanged);
   }
 
@@ -42,7 +44,7 @@ class _ServiceListScreenState extends State<ServiceListScreen> {
 
   void _refreshServices() {
     setState(() {
-      _servicesFuture = DatabaseService.instance.getAllServices();
+      _servicesFuture = _serviceRepository.getAllServices();
     });
   }
 

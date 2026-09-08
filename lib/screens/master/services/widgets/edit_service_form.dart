@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:laundry_pos_app/core/constants/app_colors.dart';
+import 'package:laundry_pos_app/core/repositories/service_repository.dart';
 import 'package:laundry_pos_app/core/services/database_service.dart';
 import 'package:laundry_pos_app/core/utils/currency_input_formatter.dart';
 import 'package:laundry_pos_app/models/service_model.dart';
 
 class EditServiceForm extends StatefulWidget {
-  final ServiceModel service; // data lama yang mau diedit
+  final ServiceModel service;
 
   const EditServiceForm({super.key, required this.service});
 
@@ -14,6 +15,7 @@ class EditServiceForm extends StatefulWidget {
 }
 
 class _EditServiceFormState extends State<EditServiceForm> {
+  final ServiceRepository _serviceRepository = ServiceRepository();
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _nameController;
   late final TextEditingController _priceController;
@@ -51,7 +53,7 @@ class _EditServiceFormState extends State<EditServiceForm> {
       price: int.parse(cleanedPrice),
       unit: _priceUnit,
     );
-    final result = await DatabaseService.instance.updateService(updatedService);
+    final result = await _serviceRepository.updateService(updatedService);
     if (!mounted) return;
     result.fold(
       (error) {

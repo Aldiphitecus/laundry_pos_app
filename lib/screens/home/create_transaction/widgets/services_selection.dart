@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart' hide State;
 import 'package:flutter/material.dart';
 import 'package:laundry_pos_app/core/constants/app_colors.dart';
+import 'package:laundry_pos_app/core/repositories/service_repository.dart';
 import 'package:laundry_pos_app/core/services/database_service.dart';
 import 'package:laundry_pos_app/models/service_model.dart';
 import 'package:laundry_pos_app/models/service_selected_model.dart';
@@ -16,13 +17,14 @@ class ServicesSelection extends StatefulWidget {
 }
 
 class _ServicesSelectionState extends State<ServicesSelection> {
+  final ServiceRepository _serviceRepository = ServiceRepository();
   late Future<Either<String, List<ServiceModel>>> _servicesFuture;
   late List<ServiceSelectedModel> _selectedServices;
 
   @override
   void initState() {
     super.initState();
-    _servicesFuture = DatabaseService.instance.getAllServices();
+    _servicesFuture = _serviceRepository.getAllServices();
     _selectedServices = List.from(widget.initialSelected);
   }
 

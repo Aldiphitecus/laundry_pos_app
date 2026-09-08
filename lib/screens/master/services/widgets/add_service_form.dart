@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:laundry_pos_app/core/constants/app_colors.dart';
+import 'package:laundry_pos_app/core/repositories/service_repository.dart';
 import 'package:laundry_pos_app/core/services/database_service.dart';
 import 'package:laundry_pos_app/core/utils/currency_input_formatter.dart';
 import 'package:laundry_pos_app/models/service_model.dart';
@@ -12,6 +13,7 @@ class AddServiceForm extends StatefulWidget {
 }
 
 class _AddServiceFormState extends State<AddServiceForm> {
+  final ServiceRepository _serviceRepository = ServiceRepository();
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _priceController = TextEditingController();
@@ -38,7 +40,7 @@ class _AddServiceFormState extends State<AddServiceForm> {
       price: int.parse(cleanedPrice),
       unit: _priceUnit,
     );
-    final result = await DatabaseService.instance.insertService(newService);
+    final result = await _serviceRepository.insertService(newService);
     if (!mounted) return;
     result.fold(
       (error) {

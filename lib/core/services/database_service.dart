@@ -3,11 +3,11 @@ import 'package:laundry_pos_app/models/service_model.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-class DatabaseService {
-  static final DatabaseService instance = DatabaseService._internal();
+class DatabaseHelpers {
+  static final DatabaseHelpers instance = DatabaseHelpers._internal();
   static Database? _database;
 
-  DatabaseService._internal();
+  DatabaseHelpers._internal();
 
   Future<Database> get database async {
     if (_database != null) return _database!;
@@ -56,65 +56,5 @@ class DatabaseService {
         FOREIGN KEY (service_id) REFERENCES services(id)
       )
     ''');
-  }
-
-  Future<Either<String, int>> insertService(ServiceModel service) async {
-    try {
-      final db = await database;
-      final id = await db.insert('services', service.toMap());
-      return Right(id);
-    } catch (e) {
-      return Left('Gagal menyimpan layanan: $e');
-    }
-  }
-
-  Future<Either<String, List<ServiceModel>>> getAllServices() async {
-    try {
-      final db = await database;
-      final result = await db.query('services');
-      final services = result.map((map) => ServiceModel.fromMap(map)).toList();
-      return Right(services);
-    } catch (e) {
-      return Left('Gagal mengambil data layanan: $e');
-    }
-  }
-
-  Future<Either<String, int>> updateService(ServiceModel service) async {
-    try {
-      final db = await database;
-      final rowsAffected = await db.update(
-        'services',
-        service.toMap(),
-        where: 'id = ?',
-        whereArgs: [service.id],
-      );
-      return Right(rowsAffected);
-    } catch (e) {
-      return Left('Gagal mengubah layanan: $e');
-    }
-  }
-
-  Future<Either<String, int>> deleteService(int id) async {
-    try {
-      final db = await database;
-      final rowsAffected = await db.delete(
-        'services',
-        where: 'id = ?',
-        whereArgs: [id],
-      );
-      return Right(rowsAffected);
-    } catch (e) {
-      return Left('Gagal menghapus layanan: $e');
-    }
-  }
-
-  Future<Either<String, void>> clearAllServices() async {
-    try {
-      final db = await database;
-      await db.delete('services');
-      return const Right(null);
-    } catch (e) {
-      return Left('Gagal mengosongkan data: $e');
-    }
   }
 }

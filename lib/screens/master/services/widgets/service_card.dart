@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:laundry_pos_app/core/constants/app_colors.dart';
+import 'package:laundry_pos_app/core/repositories/service_repository.dart';
 import 'package:laundry_pos_app/core/services/database_service.dart';
 import 'package:laundry_pos_app/core/utils/currency_formatter.dart';
 import 'package:laundry_pos_app/core/widgets/action_button_widget.dart';
@@ -9,12 +10,9 @@ import 'package:laundry_pos_app/screens/master/services/widgets/edit_service_for
 class ServiceCard extends StatelessWidget {
   final ServiceModel service;
   final VoidCallback onChanged;
+  final ServiceRepository _serviceRepository = ServiceRepository();
 
-  const ServiceCard({
-    super.key,
-    required this.service,
-    required this.onChanged,
-  });
+  ServiceCard({super.key, required this.service, required this.onChanged});
 
   void _showEditModal(BuildContext context) async {
     await showModalBottomSheet(
@@ -66,7 +64,7 @@ class ServiceCard extends StatelessWidget {
   }
 
   Future<void> _handleDelete(BuildContext context) async {
-    final result = await DatabaseService.instance.deleteService(service.id!);
+    final result = await _serviceRepository.deleteService(service.id!);
     if (!context.mounted) return;
     result.fold(
       (error) {
