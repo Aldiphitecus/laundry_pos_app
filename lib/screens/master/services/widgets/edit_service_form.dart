@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:laundry_pos_app/core/constants/app_colors.dart';
 import 'package:laundry_pos_app/core/repositories/service_repository.dart';
-import 'package:laundry_pos_app/core/services/database_service.dart';
 import 'package:laundry_pos_app/core/utils/currency_input_formatter.dart';
 import 'package:laundry_pos_app/models/service_model.dart';
 
